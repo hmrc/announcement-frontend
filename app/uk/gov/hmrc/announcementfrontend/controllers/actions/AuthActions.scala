@@ -46,9 +46,9 @@ trait AuthActions extends AuthorisedFunctions with AuthRedirects {
         }
       }.recover {
         case ex: AuthorisationException => Logger.error(s"Bearer Token not found: ${ex.getMessage}, redirecting to Government Gateway", ex)
-          Left(toGGLogin(GGConfig.checkStatusCallbackUrl()))
+          Left(toGGLogin(GGConfig.checkStatusCallbackUrl(id)))
         case e: Upstream4xxResponse if e.upstreamResponseCode == 401 =>
-          Left(toGGLogin(GGConfig.checkStatusCallbackUrl()))
+          Left(toGGLogin(GGConfig.checkStatusCallbackUrl(id)))
         case e => Logger.error(s"Auth failed to respond: ${e.getMessage}", e)
           Left(InternalServerError)
       }
