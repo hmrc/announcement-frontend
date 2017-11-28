@@ -47,17 +47,6 @@ object GGConfig {
 
   private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private lazy val ggBaseUrl = loadConfig("authentication.government-gateway.sign-in.base-url")
-  lazy val ggSignInUrl: String = {
-    val ggSignInPath = loadConfig("authentication.government-gateway.sign-in.path")
-    s"$ggBaseUrl$ggSignInPath"
-  }
-
-  lazy val ggSignOutUrl: String = {
-    val ggSignOutPath = loadConfig("authentication.government-gateway.sign-out.path")
-    s"$ggBaseUrl$ggSignOutPath"
-  }
-
   def checkStatusCallbackUrl(id: String = ""): String = loadConfig("authentication.login-callback.url") +
     routes.AnnouncementController.announcement(id).url
 }

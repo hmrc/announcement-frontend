@@ -15,14 +15,21 @@
 *@
 
 @import uk.gov.hmrc.announcementfrontend.config.AppConfig
+
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @main_template(title = "Need help completing this year's Tax return?", bodyClasses = None) {
-<h1>Need help completing this year's Tax return?</h1>
-<p>Need help completing this year's Tax return?</p>
-<strong>Webinars</strong>
-<p><a href="https://www.youtube.com/watch?v=b6_BBBdwgZM">Your first Self Assessment Tax Return</a></p>
-<label><strong>YouTube</strong></label>
-<p>Placeholder text</p>
+
+  <h1>Need help completing this year's Tax return?</h1>
+
+  <p>If you have not already completed your Tax return, there is some help available to you.</p></br>
+
+  <label><strong>Webinars</strong></label>
+
+  <p><a href="https://www.youtube.com/watch?v=b6_BBBdwgZM">Your first Self Assessment Tax Return</a></p>
+
+  <label><strong>YouTube</strong></label>
+
+  <p>Placeholder text</p>
 
 }
