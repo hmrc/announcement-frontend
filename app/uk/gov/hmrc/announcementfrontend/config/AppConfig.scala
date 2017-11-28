@@ -18,9 +18,12 @@ package uk.gov.hmrc.announcementfrontend.config
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.{Configuration, Environment}
 import play.api.Mode.Mode
+import play.api.{Configuration, Environment, Play}
+import uk.gov.hmrc.announcementfrontend.controllers.routes
 import uk.gov.hmrc.play.config.ServicesConfig
+
+
 
 @Singleton
 class AppConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
@@ -36,4 +39,25 @@ class AppConfig @Inject()(override val runModeConfiguration: Configuration, envi
   lazy val analyticsHost = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+}
+
+
+object GGConfig {
+  val runModeConfiguration: Configuration = Play.current.configuration
+
+  private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+
+  private lazy val ggBaseUrl = loadConfig("authentication.government-gateway.sign-in.base-url")
+  lazy val ggSignInUrl: String = {
+    val ggSignInPath = loadConfig("authentication.government-gateway.sign-in.path")
+    s"$ggBaseUrl$ggSignInPath"
+  }
+
+  lazy val ggSignOutUrl: String = {
+    val ggSignOutPath = loadConfig("authentication.government-gateway.sign-out.path")
+    s"$ggBaseUrl$ggSignOutPath"
+  }
+
+  def checkStatusCallbackUrl(id: String = ""): String = loadConfig("authentication.login-callback.url") +
+    routes.AnnouncementController.announcement(id).url
 }
