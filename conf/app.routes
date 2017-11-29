@@ -1,3 +1,4 @@
 # microservice specific routes
 
 GET        /announcement/:id        @uk.gov.hmrc.announcementfrontend.controllers.AnnouncementController.announcement(id: String)
+GET        /announcement/new/:id    @uk.gov.hmrc.announcementfrontend.controllers.AnnouncementController.announcement2(id: String)

@@ -19,20 +19,30 @@ package uk.gov.hmrc.announcementfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.announcementfrontend.config.AppConfig
 import uk.gov.hmrc.announcementfrontend.controllers.actions.AuthActions
+import uk.gov.hmrc.announcementfrontend.services.AuthService
 import uk.gov.hmrc.announcementfrontend.views.html
-import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector) extends AuthActions with FrontendController with I18nSupport {
+class AnnouncementController @Inject()(val authService: AuthService, val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector) extends AuthActions with FrontendController with I18nSupport {
 
   def announcement(id: String = "") = AuthorisedForAnnouncement(id).async { implicit request =>
     Future successful Ok(html.announcement_home())
+  }
+
+  def announcement2(id: String = "") : Action[AnyContent] = Action.async { implicit request =>
+    authService.authorised(Enrolment("IR-SA")) {
+      Future successful Ok(html.announcement_home())
+    }.recoverWith {
+      case ex:Throwable => Future.successful(Ok(s"We got an exception $ex"))
+    }
   }
 
   override def config: Configuration = runModeConfiguration
