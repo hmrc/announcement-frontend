@@ -23,9 +23,8 @@ import org.scalatestplus.play.OneAppPerSuite
 import play.api.mvc.{ActionBuilder, Request, Result, Results}
 import play.api.test.FakeRequest
 import play.api.{Configuration, Environment, Play}
-import uk.gov.hmrc.announcementfrontend.config.GGConfig
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, _}
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, InsufficientEnrolments, _}
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
@@ -46,12 +45,11 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
       status(result) shouldBe 200
     }
 
-    "return Forbidden if the user is authorised by Government Gateway and does not contain a SA UTR" in {
+    "return exception if the user is authorised by Government Gateway and does not contain a SA UTR" in {
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
-        .thenReturn(Future successful Enrolments(Set(enrolmentWithoutSAUTR)))
+        .thenReturn(Future failed new InsufficientEnrolments)
 
-      val result = response(AuthorisedForAnnouncement())
-      status(result) shouldBe 403
+      intercept[IllegalArgumentException](response(AuthorisedForAnnouncement()))
     }
 
 
@@ -69,7 +67,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
 
       val result = response(AuthorisedForAnnouncement())
       status(result) shouldBe 303
-      result.header.headers("Location") shouldBe toGGLogin(GGConfig.checkStatusCallbackUrl()).header.headers("Location")
+      result.header.headers("Location") shouldBe toGGLogin("/").header.headers("Location")
     }
 
     "redirect to Government Gateway and return 303 if auth responds with a NoActiveSession" in {
@@ -78,10 +76,9 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
 
       val result = response(AuthorisedForAnnouncement())
       status(result) shouldBe 303
-      result.header.headers("Location") shouldBe toGGLogin(GGConfig.checkStatusCallbackUrl()).header.headers("Location")
+      println(result.header.headers("Location"))
+      result.header.headers("Location") shouldBe toGGLogin("/").header.headers("Location")
     }
-
-
   }
 
   override def authConnector: AuthConnector = mockAuthConnector

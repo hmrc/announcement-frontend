@@ -19,14 +19,16 @@ object FrontendBuild extends Build with MicroService {
     "uk.gov.hmrc" %% "bootstrap-play-25" % "1.0.0"
   )
 
-  def test(scope: String = "test") = Seq(
-    "uk.gov.hmrc" %% "hmrctest" % "3.0.0" % scope,
-    "org.scalatest" %% "scalatest" % "3.0.1" % scope,
-    "org.pegdown" % "pegdown" % "1.6.0" % scope,
-    "org.jsoup" % "jsoup" % "1.8.1" % scope,
-    "org.mockito" % "mockito-core" % "2.11.0" % scope,
-    "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % scope,
-    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
+  def test() = Seq(
+    "uk.gov.hmrc" %% "hmrctest" % "3.0.0" % "test, it",
+    "org.scalatest" %% "scalatest" % "3.0.1" % "test, it",
+    "org.pegdown" % "pegdown" % "1.6.0" % "test",
+    "org.jsoup" % "jsoup" % "1.8.1" % "test",
+    "org.mockito" % "mockito-core" % "2.11.0" % "test, it",
+    "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % "test, it",
+    "com.typesafe.play" %% "play-test" % PlayVersion.current % "test",
+    "uk.gov.hmrc" %% "http-verbs-test" % "1.1.0" % "it",
+    "uk.gov.hmrc" %% "auth-test" % "4.1.0" % "it"
   )
 
 }

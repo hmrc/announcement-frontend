@@ -1,18 +1,18 @@
 @*
-* Copyright 2017 HM Revenue & Customs
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*@
+ * Copyright 2017 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
 
 @import uk.gov.hmrc.announcementfrontend.config.AppConfig
 
@@ -22,11 +22,18 @@
 
   <h1>Need help completing this year's Tax return?</h1>
 
-  <p>If you have not already completed your Tax return, there is some help available to you.</p></br>
+  <p>If you have not already completed your Tax return, there is some help available to you.</p><br>
 
   <label><strong>Webinars</strong></label>
 
-  <p><a href="https://www.youtube.com/watch?v=b6_BBBdwgZM">Your first Self Assessment Tax Return</a></p>
+  <div clas="youtube-player-container">
+    <div id="example" class="js-youtube-player" data-video-id="b6_BBBdwgZM" />
+  </div>
+  <script type="text/javascript">
+       document.body.className = document.body.className.replace('no-js', 'js') + ' js-enabled';
+    </script>
+
+  <p>Your first Self Assessment Tax Return</p><br>
 
   <label><strong>YouTube</strong></label>
 

@@ -18,8 +18,6 @@ package uk.gov.hmrc.announcementfrontend.controllers.actions
 
 import play.api.Logger
 import play.api.mvc._
-import uk.gov.hmrc.announcementfrontend.config.GGConfig
-import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals._
 import uk.gov.hmrc.http.Upstream4xxResponse
@@ -32,24 +30,18 @@ import scala.concurrent.Future
 
 trait AuthActions extends AuthorisedFunctions with AuthRedirects {
 
-  private def getEnrolment(enrolments: Set[Enrolment], enrolmentKey: String, identifier: String): Option[EnrolmentIdentifier] = {
-    enrolments.find(_.key == enrolmentKey).flatMap(_.identifiers.find(_.key == identifier))
-  }
-
   def AuthorisedForAnnouncement(id: String = ""): ActionBuilder[AnnouncementRequest] = new ActionBuilder[AnnouncementRequest] with ActionRefiner[Request, AnnouncementRequest] with Results {
     override def refine[A](request: Request[A]): Future[Either[Result, AnnouncementRequest[A]]] = {
       implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
-      authorised(AuthProviders(GovernmentGateway)).retrieve(allEnrolments) {
-        enrol => getEnrolment(enrol.enrolments, "IR-SA", "UTR") match {
-          case Some(x) => Future successful Right(AnnouncementRequest(enrol, request))
-          case None => Future successful Left(Results.Forbidden)
-        }
+      authorised(Enrolment("IR-SA")).retrieve(authorisedEnrolments) {
+         enrol => Future successful Right(AnnouncementRequest(enrol, request))
       }.recover {
+        case e: InsufficientEnrolments => throw new IllegalArgumentException
         case ex: AuthorisationException => Logger.error(s"Bearer Token not found: ${ex.getMessage}, redirecting to Government Gateway", ex)
-          Left(toGGLogin(GGConfig.checkStatusCallbackUrl(id)))
+          Left(toGGLogin(request.uri))
         case e: Upstream4xxResponse if e.upstreamResponseCode == 401 =>
-          Left(toGGLogin(GGConfig.checkStatusCallbackUrl(id)))
-        case e => Logger.error(s"Auth failed to respond: ${e.getMessage}", e)
+          Left(toGGLogin(request.uri))
+          case e => Logger.error(s"Auth failed to respond: ${e.getMessage}", e)
           Left(InternalServerError)
       }
     }
