@@ -38,7 +38,7 @@ trait AuthActions extends AuthorisedFunctions with AuthRedirects {
 
   def AuthorisedForAnnouncement(id: String = ""): ActionBuilder[AnnouncementRequest] = new ActionBuilder[AnnouncementRequest] with ActionRefiner[Request, AnnouncementRequest] with Results {
     override def refine[A](request: Request[A]): Future[Either[Result, AnnouncementRequest[A]]] = {
-      implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers)
+      implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
       authorised(AuthProviders(GovernmentGateway)).retrieve(allEnrolments) {
         enrol => getEnrolment(enrol.enrolments, "IR-SA", "UTR") match {
           case Some(x) => Future successful Right(AnnouncementRequest(enrol, request))
