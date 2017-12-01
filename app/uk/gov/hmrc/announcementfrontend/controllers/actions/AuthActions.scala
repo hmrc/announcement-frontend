@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 trait AuthActions extends AuthorisedFunctions with AuthRedirects {
 
-  def AuthorisedForAnnouncement(id: String = ""): ActionBuilder[AnnouncementRequest] = new ActionBuilder[AnnouncementRequest] with ActionRefiner[Request, AnnouncementRequest] with Results {
+  def AuthorisedForAnnouncement: ActionBuilder[AnnouncementRequest] = new ActionBuilder[AnnouncementRequest] with ActionRefiner[Request, AnnouncementRequest] with Results {
     override def refine[A](request: Request[A]): Future[Either[Result, AnnouncementRequest[A]]] = {
       implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
       authorised(Enrolment("IR-SA")).retrieve(authorisedEnrolments) {

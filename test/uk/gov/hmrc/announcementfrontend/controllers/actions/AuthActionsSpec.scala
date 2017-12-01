@@ -41,7 +41,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future successful Enrolments(Set(enrolmentWithSAUTR)))
 
-      val result = response(AuthorisedForAnnouncement())
+      val result = response(AuthorisedForAnnouncement)
       status(result) shouldBe 200
     }
 
@@ -49,7 +49,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new InsufficientEnrolments)
 
-      intercept[IllegalArgumentException](response(AuthorisedForAnnouncement()))
+      intercept[IllegalArgumentException](response(AuthorisedForAnnouncement))
     }
 
 
@@ -57,7 +57,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new Throwable)
 
-      val result = response(AuthorisedForAnnouncement())
+      val result = response(AuthorisedForAnnouncement)
       status(result) shouldBe 500
     }
 
@@ -65,7 +65,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new AuthorisationException("") {})
 
-      val result = response(AuthorisedForAnnouncement())
+      val result = response(AuthorisedForAnnouncement)
       status(result) shouldBe 303
       result.header.headers("Location") shouldBe toGGLogin("/").header.headers("Location")
     }
@@ -74,7 +74,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new NoActiveSession("") {})
 
-      val result = response(AuthorisedForAnnouncement())
+      val result = response(AuthorisedForAnnouncement)
       status(result) shouldBe 303
       println(result.header.headers("Location"))
       result.header.headers("Location") shouldBe toGGLogin("/").header.headers("Location")
