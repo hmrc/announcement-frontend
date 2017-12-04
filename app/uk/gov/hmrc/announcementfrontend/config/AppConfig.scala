@@ -33,7 +33,7 @@ class AppConfig @Inject()(override val runModeConfiguration: Configuration, envi
   private val contactHost = runModeConfiguration.getString(s"contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
-  lazy val buttonToggle = loadConfig(s"featureToggle.button.switch")
+  lazy val buttonToggle = runModeConfiguration.getBoolean(s"$env.featureToggle.button.switch").getOrElse(false)
   lazy val assetsPrefix = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val analyticsToken = loadConfig(s"google-analytics.token")
   lazy val analyticsHost = loadConfig(s"google-analytics.host")
