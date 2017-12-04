@@ -13,6 +13,7 @@ trait MicroService {
   import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
   import uk.gov.hmrc.versioning.SbtGitVersioning
   import play.sbt.routes.RoutesKeys.routesGenerator
+  import play.sbt.PlayImport.PlayKeys.playDefaultPort
 
 
   import TestPhases._
@@ -28,6 +29,7 @@ trait MicroService {
     .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
     .settings(playSettings : _*)
     .settings(scalaSettings: _*)
+    .settings(playDefaultPort := 9067)
     .settings(publishingSettings: _*)
     .settings(defaultSettings(): _*)
     .settings(

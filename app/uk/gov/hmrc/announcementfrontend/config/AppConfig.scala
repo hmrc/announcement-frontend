@@ -18,9 +18,11 @@ package uk.gov.hmrc.announcementfrontend.config
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.{Configuration, Environment}
 import play.api.Mode.Mode
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
+
+
 
 @Singleton
 class AppConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
@@ -31,6 +33,7 @@ class AppConfig @Inject()(override val runModeConfiguration: Configuration, envi
   private val contactHost = runModeConfiguration.getString(s"contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
+  lazy val buttonToggle = runModeConfiguration.getBoolean(s"$env.featureToggle.button.switch").getOrElse(false)
   lazy val assetsPrefix = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val analyticsToken = loadConfig(s"google-analytics.token")
   lazy val analyticsHost = loadConfig(s"google-analytics.host")
