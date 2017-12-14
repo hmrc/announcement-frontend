@@ -20,27 +20,48 @@
 
 @main_template(title = "Need help completing this year's Tax return?", bodyClasses = None) {
 
-  <h1>Need help completing this year's Tax return?</h1>
+    <h1>Need help completing this year's Tax return?</h1>
 
-  <p>If you have not already completed your Tax return, there is some help available to you.</p><br>
+    <p>If you have not already completed your Tax return, there is some help available to you.</p><br>
 
-  <label><strong>Webinars</strong></label>
+    <label><strong>Webinars</strong></label>
 
-  <div clas="youtube-player-container">
-    <div id="example" class="js-youtube-player" data-video-id="G16qqjgfYEU" />
-  </div>
-  <script type="text/javascript">
-       document.body.className = document.body.className.replace('no-js', 'js') + ' js-enabled';
+    <p>Webinars not available yet.</p>
+
+    <br><label><strong>YouTube</strong></label>
+
+    <div clas="youtube-player-container">
+        <div id="example" class="js-youtube-player" data-video-id="G16qqjgfYEU" />
+    </div>
+    <script type="text/javascript">
+            document.body.className = document.body.className.replace('no-js', 'js') + ' js-enabled';
     </script>
 
-  <p>Your first Self Assessment Tax Return</p><br>
+    <p>Your first Self Assessment Tax Return</p>
 
-  <label><strong>YouTube</strong></label>
 
     @if(appConfig.buttonToggle) {
-        <br><a class="button button-start" href="#" role="button">Press Here</a></br>
+        <br><a class="button button-start" href="https://www.gov.uk/topic/personal-tax/self-assessment" role="button">Click Here</a></br>
     }
 
   <p>Placeholder text</p>
 
+    <br>
+    <h2 id="webchat-title">Webchat</h2>
+    <p><span class="js-webchat" data-availability-url="https://online.hmrc.gov.uk/webchatprod/egain/chat/entrypoint/checkEligibility/1004" data-open-url="https://online.hmrc.gov.uk/webchatprod/templates/chat/hmrc7/chat.html?entryPointId=1004&amp;templateName=hmrc7&amp;languageCode=en&amp;countryCode=US&amp;ver=v11">
+        <span class="js-webchat-advisers-error">
+            Webchat is unavailable at the moment because of technical problems.
+        </span>
+        <span class="js-webchat-advisers-unavailable hidden">
+            Webchat is closed at the moment.
+        </span>
+        <span class="js-webchat-advisers-busy hidden">
+            All webchat advisers are busy at the moment.
+        </span>
+        <span class="js-webchat-advisers-available hidden">
+            Advisers are available to chat.
+            <a href="#" rel="external" class="js-webchat-open-button">Speak to an adviser now</a>.
+        </span>
+    </span>
+    </p>
 }
