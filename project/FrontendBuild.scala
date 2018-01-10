@@ -26,7 +26,8 @@ object FrontendBuild extends Build with MicroService {
     "org.jsoup" % "jsoup" % "1.8.1" % "test",
     "org.mockito" % "mockito-core" % "2.11.0" % "test, it",
     "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % "test, it",
-    "com.typesafe.play" %% "play-test" % PlayVersion.current % "test"
+    "com.typesafe.play" %% "play-test" % PlayVersion.current % "test",
+    "com.github.tomakehurst" % "wiremock" % "2.7.1" % "test"
   )
 
 }

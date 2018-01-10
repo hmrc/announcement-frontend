@@ -19,24 +19,25 @@ package uk.gov.hmrc.announcementfrontend.controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.announcementfrontend.config.AppConfig
 import uk.gov.hmrc.announcementfrontend.controllers.actions.AuthActions
 import uk.gov.hmrc.announcementfrontend.views.html
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.announcementfrontend.config.AppConfig
+import uk.gov.hmrc.announcementfrontend.connectors.CspPartialConnector
 
 import scala.concurrent.Future
 
 @Singleton
 class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector) extends AuthActions with FrontendController with I18nSupport {
 
-  def announcement = AuthorisedForAnnouncement.async { implicit announcementRequest =>
-    Future successful Ok(html.announcement_home())
+  def sa_filling_notice_2017: Action[AnyContent] = AuthorisedForAnnouncement.async { implicit announcementRequest =>
+    Future.successful(Ok(html.sa_filing_notice_2017()))
   }
 
   override def config: Configuration = runModeConfiguration
 
   override def env: Environment = environment
 }
-

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
 
   override def authConnector: AuthConnector = mockAuthConnector
 
-  lazy val mockAuthConnector = mock[AuthConnector]
+  private lazy val mockAuthConnector = mock[AuthConnector]
 
   private def response(actionBuilder: ActionBuilder[Request]): Result = {
     val action = actionBuilder {
@@ -92,7 +92,7 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
     await(action(FakeRequest()))
   }
 
-  override def config: Configuration = Play.current.configuration
+  override def config: Configuration = app.injector.instanceOf[Configuration]
 
   override def env: Environment = app.injector.instanceOf[Environment]
 }
