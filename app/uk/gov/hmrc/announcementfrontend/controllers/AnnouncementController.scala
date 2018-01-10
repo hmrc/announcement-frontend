@@ -31,7 +31,7 @@ import uk.gov.hmrc.announcementfrontend.connectors.CspPartialConnector
 import scala.concurrent.Future
 
 @Singleton
-class AnnouncementController @Inject()(val messagesApi: MessagesApi, val cspPartialConnector: CspPartialConnector, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector) extends AuthActions with FrontendController with I18nSupport {
+class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector) extends AuthActions with FrontendController with I18nSupport {
 
   def sa_filling_notice_2017: Action[AnyContent] = AuthorisedForAnnouncement.async { implicit announcementRequest =>
     Future.successful(Ok(html.sa_filing_notice_2017()))
