@@ -33,8 +33,8 @@ import scala.concurrent.Future
 @Singleton
 class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector) extends AuthActions with FrontendController with I18nSupport {
 
-  def sa_filling_notice_2017: Action[AnyContent] = AuthorisedForAnnouncement.async { implicit announcementRequest =>
-    Future.successful(Ok(html.sa_filing_notice_2017()))
+  def sa_filling_notice_2018: Action[AnyContent] = AuthorisedForAnnouncement.async { implicit announcementRequest =>
+    Future.successful(Ok(html.sa_filing_notice_2018()))
   }
 
   override def config: Configuration = runModeConfiguration

@@ -24,7 +24,7 @@ import play.api.Application
 import play.api.i18n.Messages.Implicits.applicationMessages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.announcementfrontend.config.AppConfig
-import uk.gov.hmrc.announcementfrontend.views.html.sa_filing_notice_2017
+import uk.gov.hmrc.announcementfrontend.views.html.sa_filing_notice_2018
 import uk.gov.hmrc.play.test.UnitSpec
 
 class AnnouncementControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
@@ -35,7 +35,7 @@ class AnnouncementControllerSpec extends UnitSpec with MockitoSugar with OneAppP
   "Announcements sa-filing-notice-2017 html" should {
 
     "contain a webchat link with webchat status " is pendingUntilFixed {
-      val result = Jsoup.parse(sa_filing_notice_2017()(FakeRequest("GET", "/"), applicationMessages, mockAppConfig).toString())
+      val result = Jsoup.parse(sa_filing_notice_2018()(FakeRequest("GET", "/"), applicationMessages, mockAppConfig).toString())
 
       result.body().toString should include("Webchat is unavailable at the moment because of technical problems.")
       result.body().toString should include("Webchat is closed at the moment.")
