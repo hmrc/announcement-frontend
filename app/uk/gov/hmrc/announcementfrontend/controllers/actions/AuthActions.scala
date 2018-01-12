@@ -36,12 +36,10 @@ trait AuthActions extends AuthorisedFunctions with AuthRedirects {
       authorised(Enrolment("IR-SA")).retrieve(authorisedEnrolments) {
          enrol => Future successful Right(AnnouncementRequest(enrol, request))
       }.recover {
-        case e: InsufficientEnrolments => throw new IllegalArgumentException
-        case ex: AuthorisationException => Logger.error(s"Bearer Token not found: ${ex.getMessage}, redirecting to Government Gateway", ex)
-          Left(toGGLogin(request.uri))
-        case e: Upstream4xxResponse if e.upstreamResponseCode == 401 =>
-          Left(toGGLogin(request.uri))
-          case e => Logger.error(s"Auth failed to respond: ${e.getMessage}", e)
+        case _ : InsufficientEnrolments => throw new IllegalArgumentException
+        case _ : AuthorisationException => Left(toGGLogin(request.uri))
+        case e: Upstream4xxResponse if e.upstreamResponseCode == 401 => Left(toGGLogin(request.uri))
+        case e => Logger.error(s"Auth failed to respond: ${e.getMessage}", e)
           Left(InternalServerError)
       }
     }
