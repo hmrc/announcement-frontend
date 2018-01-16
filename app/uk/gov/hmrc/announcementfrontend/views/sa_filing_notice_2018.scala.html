@@ -115,7 +115,11 @@
     <h2>Webinar</h2>
     There are several live sessions this month so you can <a target="_blank" href="https://attendee.gotowebinar.com/rt/3476407663065430785?source=Dec-16-CAMPAIGN">choose a session</a> that’s convenient for you.
     </div>
-    @******** <div>
-        <label><h2 id="webchat-title">Webchat</h2></label>
-    </div> ******@
+    <div>
+        <div id="webchatHolder" class="subsection">
+            <h2 id="webchat-heading">@Messages("webchat.heading")</h2>
+            <p id="webchat-message"><a href="javascript:void(0)" data-journey-click="SAFiling2018:Click:webchat" onclick="openChat()" id="eGainButton">@Messages("webchat.speak")</a></p>
+        </div>
+        @uk.gov.hmrc.csp.WebchatClient.webchatClickToChatScriptPartial("1004", "hmrc7")
+    </div>
 }
