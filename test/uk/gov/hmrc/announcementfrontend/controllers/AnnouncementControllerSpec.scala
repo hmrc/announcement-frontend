@@ -32,16 +32,16 @@ class AnnouncementControllerSpec extends UnitSpec with MockitoSugar with OneAppP
   private val mockAppConfig = app.injector.instanceOf[AppConfig]
   override implicit lazy val app: Application = fakeApplication()
 
-  "Announcements sa-filing-notice-2017 html" should {
+  "Announcements sa-filing-notice-2018 html" should {
 
-    "contain a webchat link with webchat status " is pendingUntilFixed {
+    "contain a webchat link with webchat status " in {
       val result = Jsoup.parse(sa_filing_notice_2018()(FakeRequest("GET", "/"), applicationMessages, mockAppConfig).toString())
 
-      result.body().toString should include("Webchat is unavailable at the moment because of technical problems.")
-      result.body().toString should include("Webchat is closed at the moment.")
-      result.body().toString should include("All webchat advisers are busy at the moment.")
-      result.body().toString should include("Advisers are available to chat.")
-      result.body().toString should include("Speak to an adviser now")
+      result.body().toString should include("Need help with completing your tax return?")
+      result.body().toString should include("Tell HMRC about an employee's")
+      result.body().toString should include("Webinar")
+      result.body().toString should include("There are several live sessions this month so you can")
+      result.body().toString should include("Talk to an adviser online")
     }
   }
 }

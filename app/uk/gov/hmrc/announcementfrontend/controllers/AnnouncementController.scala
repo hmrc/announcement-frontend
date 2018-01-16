@@ -26,7 +26,6 @@ import uk.gov.hmrc.announcementfrontend.views.html
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.announcementfrontend.config.AppConfig
-import uk.gov.hmrc.announcementfrontend.connectors.CspPartialConnector
 
 import scala.concurrent.Future
 
