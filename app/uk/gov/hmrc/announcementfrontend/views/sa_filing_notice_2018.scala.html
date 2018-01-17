@@ -18,8 +18,13 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@main_template(title="Need help with completing your tax return?", bodyClasses=None) {
-    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+@gaCallsFunction(analyticsHost: String, token: String) = {
+    ga("create", "@token", "@analyticsHost");
+    ga("submit", "page", "sa_filing_2018");
+    ga("send", "pageview", "sa_filing_2018");
+}
+
+@main_template(title="Need help with completing your tax return?", bodyClasses=None, gaCalls=Some(gaCallsFunction)) {
     <h1>Need help with completing your tax return?</h1>
     <h2>If you have not already completed your tax return and need help you can:</h2>
     <div>
