@@ -17,7 +17,7 @@ object FrontendBuild extends Build with MicroService {
     "uk.gov.hmrc" %% "auth-client" % "2.6.0",
     ws,
     "uk.gov.hmrc" %% "bootstrap-play-25" % "1.6.0",
-    "uk.gov.hmrc" %% "csp-client" % "2.3.0"
+    "uk.gov.hmrc" %% "csp-client" % "3.1.0"
   )
 
   def test() = Seq(
