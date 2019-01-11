@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,12 @@ import scala.concurrent.Future
 @Singleton
 class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector) extends AuthActions with FrontendController with I18nSupport {
 
-  def sa_filling_notice_2018: Action[AnyContent] = AuthorisedForAnnouncement.async { implicit announcementRequest =>
+  def saFillingNotice2018: Action[AnyContent] = AuthorisedForAnnouncement.async { implicit announcementRequest =>
     Future.successful(Ok(html.sa_filing_notice_2018()))
+  }
+
+  def enquiry = Action {
+    Redirect(appConfig.twoWayMessageEnquiryFrontend)
   }
 
   override def config: Configuration = runModeConfiguration

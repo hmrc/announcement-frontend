@@ -1,3 +1,4 @@
 # microservice specific routes
 
-GET        /sa-filing-notice-2018       @uk.gov.hmrc.announcementfrontend.controllers.AnnouncementController.sa_filling_notice_2018
+GET        /sa-filing-notice-2018       @uk.gov.hmrc.announcementfrontend.controllers.AnnouncementController.saFillingNotice2018
+GET        /enquiry                     @uk.gov.hmrc.announcementfrontend.controllers.AnnouncementController.enquiry
