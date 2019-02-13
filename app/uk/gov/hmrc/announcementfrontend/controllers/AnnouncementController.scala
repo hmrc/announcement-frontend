@@ -29,9 +29,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig,
-                                       runModeConfiguration: Configuration, environment: Environment,
-                                       override val authConnector: AuthConnector, ec: ExecutionContext)
+class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector, ec: ExecutionContext)
   extends AuthActions with FrontendController with I18nSupport {
 
   def saFillingNotice2018: Action[AnyContent] = AuthorisedForAnnouncement(ec).async { implicit announcementRequest =>
