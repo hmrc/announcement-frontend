@@ -23,14 +23,14 @@ import uk.gov.hmrc.auth.core.retrieve.Retrievals._
 import uk.gov.hmrc.http.Upstream4xxResponse
 import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 trait AuthActions extends AuthorisedFunctions with AuthRedirects {
 
-  def AuthorisedForAnnouncement: ActionBuilder[AnnouncementRequest] = new ActionBuilder[AnnouncementRequest] with ActionRefiner[Request, AnnouncementRequest] with Results {
+  def AuthorisedForAnnouncement(implicit ec: ExecutionContext): ActionBuilder[AnnouncementRequest] =
+    new ActionBuilder[AnnouncementRequest] with ActionRefiner[Request, AnnouncementRequest] with Results {
     override def refine[A](request: Request[A]): Future[Either[Result, AnnouncementRequest[A]]] = {
       implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
       authorised(Enrolment("IR-SA")).retrieve(authorisedEnrolments) {

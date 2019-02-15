@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.announcementfrontend.controllers.actions
 
-import org.mockito.ArgumentMatchers.{eq => eqs, _}
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.mvc.{ActionBuilder, Request, Result, Results}
 import play.api.test.FakeRequest
-import play.api.{Configuration, Environment, Play}
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, InsufficientEnrolments, _}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -30,6 +30,8 @@ import uk.gov.hmrc.play.test.UnitSpec
 import scala.concurrent.Future
 
 class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with OneAppPerSuite {
+
+  import scala.concurrent.ExecutionContext.Implicits.global
 
   val enrolmentWithoutSAUTR = Enrolment("HMRC-MTD-IT", Seq(EnrolmentIdentifier("MTDITID", "mtdItId")), state = "", delegatedAuthRule = None)
 
