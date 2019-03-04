@@ -129,7 +129,7 @@
         @uk.gov.hmrc.csp.WebchatClient.webchatClickToChatScriptPartial("1004", "hmrc7")
         @if(appConfig.twoWayMessageEnabled){
             <h2>Ask a question</h2>
-            <a href="@AnnouncementController.enquiry">Ask a secure question</a>
+            <a href="@appConfig.twoWayMessageEnquiryFrontend">Ask a secure question</a>
         }
     </div>
 
