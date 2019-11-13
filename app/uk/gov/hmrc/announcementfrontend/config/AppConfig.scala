@@ -17,30 +17,23 @@
 package uk.gov.hmrc.announcementfrontend.config
 
 import javax.inject.{Inject, Singleton}
-
-import play.api.Mode.Mode
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.config.ServicesConfig
-
-
-
+import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 @Singleton
-class AppConfig @Inject()(override val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
-  override protected def mode: Mode = environment.mode
+class AppConfig @Inject()(servicesConfig: ServicesConfig, runModeConfiguration: Configuration, environment: Environment, runMode: RunMode) {
 
-  private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  private def loadConfig(key: String) = runModeConfiguration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private val contactHost = runModeConfiguration.getString(s"contact-frontend.host").getOrElse("")
-  private val twoWayMessageHost = runModeConfiguration.getString(s"two-way-message-frontend.host").getOrElse("")
+  private val contactHost = runModeConfiguration.getOptional[String](s"contact-frontend.host").getOrElse("")
+  private val twoWayMessageHost = runModeConfiguration.getOptional[String](s"two-way-message-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
-  lazy val buttonToggle = runModeConfiguration.getBoolean(s"$env.featureToggle.button.switch").getOrElse(false)
-  lazy val twoWayMessageEnabled = runModeConfiguration.getBoolean(s"$env.twoWayMessage.enable").getOrElse(false)
+  lazy val buttonToggle = runModeConfiguration.getOptional[Boolean](s"${runMode.env}.featureToggle.button.switch").getOrElse(false)
+  lazy val twoWayMessageEnabled = runModeConfiguration.getOptional[Boolean](s"${runMode.env}.twoWayMessage.enable").getOrElse(false)
   lazy val assetsPrefix = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val analyticsToken = loadConfig(s"google-analytics.token")
   lazy val analyticsHost = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   lazy val twoWayMessageEnquiryFrontend = s"$twoWayMessageHost/two-way-message-frontend/message/p800/make_enquiry?backCode=d2luZG93LmxvY2F0aW9uLmhyZWY9Jy9hbm5vdW5jZW1lbnQvc2EtZmlsaW5nLW5vdGljZS0yMDE4Jw%3D%3D"
-
 }

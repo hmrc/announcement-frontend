@@ -21,23 +21,22 @@ import sbt._
 object AppDependencies {
   
   val compile = Seq(
-    "uk.gov.hmrc" %% "govuk-template" % "5.28.0-play-25",
-    "uk.gov.hmrc" %% "play-ui" % "7.30.0-play-25",
-    "uk.gov.hmrc" %% "auth-client" % "2.19.0-play-25",
+    "uk.gov.hmrc" %% "govuk-template" % "5.42.0-play-26",
+    "uk.gov.hmrc" %% "play-ui" % "8.3.0-play-26",
+    "uk.gov.hmrc" %% "auth-client" % "2.30.0-play-26",
     ws,
-    "uk.gov.hmrc" %% "bootstrap-play-25" % "4.8.0",
-    "uk.gov.hmrc" %% "csp-client" % "3.4.0"
+    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.1.0",
+    "uk.gov.hmrc" %% "csp-client" % "4.1.0-play-26"
   )
 
   val test =Seq(
-    "uk.gov.hmrc" %% "hmrctest" % "3.4.0-play-25" % "test, it",
-    "org.scalatest" %% "scalatest" % "3.0.1" % "test, it",
+     "com.typesafe.play" %% "play-test" % PlayVersion.current % "test",
     "org.pegdown" % "pegdown" % "1.6.0" % "test",
-    "org.jsoup" % "jsoup" % "1.8.1" % "test",
-    "org.mockito" % "mockito-core" % "2.11.0" % "test, it",
-    "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % "test, it",
-    "com.typesafe.play" %% "play-test" % PlayVersion.current % "test",
-    "com.github.tomakehurst" % "wiremock" % "2.7.1" % "test"
+    "org.jsoup" % "jsoup" % "1.12.1" % "test",
+    "org.mockito"            % "mockito-all"               % "1.10.19" % "test",
+    "com.github.tomakehurst" % "wiremock-jre8"             % "2.21.0" % "test,it",
+    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0" % "test",
+    "net.codingwell"         %% "scala-guice"              % "4.2.6",
+    "uk.gov.hmrc"            %% "bootstrap-play-26"        % "1.1.0" % "test" classifier "tests"
   )
-
 }

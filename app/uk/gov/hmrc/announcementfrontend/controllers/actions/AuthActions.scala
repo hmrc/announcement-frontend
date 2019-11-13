@@ -27,10 +27,10 @@ import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
 import scala.concurrent.{ExecutionContext, Future}
 
 
-trait AuthActions extends AuthorisedFunctions with AuthRedirects {
+trait AuthActions extends AuthorisedFunctions with AuthRedirects  {
 
-  def AuthorisedForAnnouncement(implicit ec: ExecutionContext): ActionBuilder[AnnouncementRequest] =
-    new ActionBuilder[AnnouncementRequest] with ActionRefiner[Request, AnnouncementRequest] with Results {
+  def AuthorisedForAnnouncement(cc: ControllerComponents)(implicit ec:ExecutionContext): ActionBuilder[AnnouncementRequest, AnyContent] =
+    new ActionBuilder[AnnouncementRequest, AnyContent] with ActionRefiner[Request, AnnouncementRequest] with Results {
     override def refine[A](request: Request[A]): Future[Either[Result, AnnouncementRequest[A]]] = {
       implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
       authorised(Enrolment("IR-SA")).retrieve(authorisedEnrolments) {
@@ -43,7 +43,10 @@ trait AuthActions extends AuthorisedFunctions with AuthRedirects {
           Left(InternalServerError)
       }
     }
-  }
+
+      override def parser: BodyParser[AnyContent] = cc.parsers.defaultBodyParser
+      override protected def executionContext: ExecutionContext = ec
+    }
 }
 
-case class AnnouncementRequest[A](enrolments: Enrolments, request: Request[A]) extends WrappedRequest[A](request)
+case class AnnouncementRequest[A](enrolments: Enrolments, request: Request[A])  extends WrappedRequest[A](request)
