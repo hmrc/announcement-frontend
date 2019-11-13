@@ -16,32 +16,33 @@
 
 package uk.gov.hmrc.announcementfrontend.controllers
 
-
 import org.jsoup.Jsoup
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
+import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.i18n.Messages.Implicits.applicationMessages
+import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.announcementfrontend.config.AppConfig
 import uk.gov.hmrc.announcementfrontend.views.html.sa_filing_notice_2018
-import uk.gov.hmrc.play.test.UnitSpec
 
-class AnnouncementControllerSpec extends UnitSpec with MockitoSugar with OneAppPerSuite {
+
+class AnnouncementControllerSpec extends PlaySpec with MockitoSugar with GuiceOneAppPerSuite {
 
   private val mockAppConfig = app.injector.instanceOf[AppConfig]
   override implicit lazy val app: Application = fakeApplication()
 
   "Announcements sa-filing-notice-2018 html" should {
-
     "contain a webchat link with webchat status " in {
-      val result = Jsoup.parse(sa_filing_notice_2018()(FakeRequest("GET", "/"), applicationMessages, mockAppConfig).toString())
+        val messagesApi = app.injector.instanceOf[MessagesApi]
+        val messages = MessagesImpl(Lang.defaultLang, messagesApi)
+        val result = Jsoup.parse(sa_filing_notice_2018()(FakeRequest("GET", "/"), messages , mockAppConfig).toString())
 
-      result.body().toString should include("Need help with completing your tax return?")
-      result.body().toString should include("Tell HMRC about an employee's")
-      result.body().toString should include("Webinar")
-      result.body().toString should include("There are several live sessions this month so you can")
-      result.body().toString should include("Talk to an adviser online")
+        result.body().toString must include("Need help with completing your tax return?")
+        result.body().toString must include("Tell HMRC about an employee's")
+        result.body().toString must include("Webinar")
+        result.body().toString must include("There are several live sessions this month so you can")
+        result.body().toString must include("Talk to an adviser online")
     }
   }
 }

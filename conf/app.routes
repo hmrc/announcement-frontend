@@ -2,3 +2,4 @@
 
 GET        /sa-filing-notice-2018       @uk.gov.hmrc.announcementfrontend.controllers.AnnouncementController.saFillingNotice2018
 GET        /enquiry                     @uk.gov.hmrc.announcementfrontend.controllers.AnnouncementController.enquiry
+GET        /test                        @uk.gov.hmrc.announcementfrontend.controllers.TestController.eval

@@ -18,11 +18,10 @@ package util
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
-
 import org.scalatest._
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatestplus.play.PlaySpec
 
-trait WithWireMock extends UnitSpec with BeforeAndAfterEach {
+trait WithWireMock extends PlaySpec with BeforeAndAfterEach {
   def dependenciesPort = 8291
   val wireMockServer = new WireMockServer(20001)
 
