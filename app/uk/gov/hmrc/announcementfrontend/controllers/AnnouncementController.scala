@@ -18,21 +18,29 @@ package uk.gov.hmrc.announcementfrontend.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc._
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.announcementfrontend.config.AppConfig
 import uk.gov.hmrc.announcementfrontend.controllers.actions.AuthActions
 import uk.gov.hmrc.announcementfrontend.views.html
-import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.play.bootstrap.config.{AuthRedirects, ServicesConfig}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
-class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig, runModeConfiguration: Configuration, environment: Environment, override val authConnector: AuthConnector, ec: ExecutionContext)
-  extends AuthActions with FrontendController with I18nSupport {
+class AnnouncementController @Inject()(
+                                       implicit val appConfig: AppConfig,
+                                       override val messagesApi: MessagesApi,
+                                       configuration: Configuration,
+                                       servicesConfig: ServicesConfig,
+                                       controllerComponents: MessagesControllerComponents,
+                                       environment: Environment,
+                                       override val authConnector: AuthConnector
+                                       )
+  extends AuthActions with InjectedController  with I18nSupport with AuthorisedFunctions with AuthRedirects {
 
-  def saFillingNotice2018: Action[AnyContent] = AuthorisedForAnnouncement(ec).async { implicit announcementRequest =>
+  def saFillingNotice2018: Action[AnyContent] = AuthorisedForAnnouncement(controllerComponents)(controllerComponents.executionContext).async { implicit announcementRequest =>
     Future.successful(Ok(html.sa_filing_notice_2018()))
   }
 
@@ -40,7 +48,8 @@ class AnnouncementController @Inject()(val messagesApi: MessagesApi, implicit va
     Redirect(appConfig.twoWayMessageEnquiryFrontend)
   }
 
-  override def config: Configuration = runModeConfiguration
-
+  override def config: Configuration = configuration
   override def env: Environment = environment
 }
+
+case class AnnouncementRequest[A](enrolments: Enrolments, request: Request[A]) extends WrappedRequest[A](request)

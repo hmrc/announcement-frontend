@@ -16,42 +16,43 @@
 
 package uk.gov.hmrc.announcementfrontend.controllers.actions
 
-import org.mockito.ArgumentMatchers._
+import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
-import play.api.mvc.{ActionBuilder, Request, Result, Results}
+import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, InsufficientEnrolments, _}
-import uk.gov.hmrc.play.test.UnitSpec
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
-import scala.concurrent.Future
-
-class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with OneAppPerSuite {
+class AuthActionsSpec extends PlaySpec with AuthActions with MockitoSugar with GuiceOneAppPerSuite {
 
   import scala.concurrent.ExecutionContext.Implicits.global
+
+  val controllerComponents = mock[ControllerComponents]
 
   val enrolmentWithoutSAUTR = Enrolment("HMRC-MTD-IT", Seq(EnrolmentIdentifier("MTDITID", "mtdItId")), state = "", delegatedAuthRule = None)
 
   val enrolmentWithSAUTR = Enrolment("IR-SA", Seq(EnrolmentIdentifier("UTR", "someUtr")), state = "", delegatedAuthRule = None)
 
   "AuthorisedForAnnouncement" should {
-
     "return an 200 if the user is authorised by Government Gateway and contains SA UTR" in {
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future successful Enrolments(Set(enrolmentWithSAUTR)))
 
-      val result = response(AuthorisedForAnnouncement)
-      status(result) shouldBe 200
+      val result: Result = response(AuthorisedForAnnouncement(controllerComponents))
+      result.header.status must be(200)
     }
 
     "return exception if the user is authorised by Government Gateway and does not contain a SA UTR" in {
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new InsufficientEnrolments)
 
-      intercept[IllegalArgumentException](response(AuthorisedForAnnouncement))
+      intercept[IllegalArgumentException](response(AuthorisedForAnnouncement(controllerComponents)))
     }
 
 
@@ -59,42 +60,40 @@ class AuthActionsSpec extends UnitSpec with MockitoSugar with AuthActions with O
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new Throwable)
 
-      val result = response(AuthorisedForAnnouncement)
-      status(result) shouldBe 500
+      val result = response(AuthorisedForAnnouncement(controllerComponents))
+      result.header.status must be(500)
     }
 
     "redirect to Government Gateway and return 303 if auth responds with a AuthorisedForAnnouncement" in {
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new AuthorisationException("") {})
 
-      val result = response(AuthorisedForAnnouncement)
-      status(result) shouldBe 303
-      result.header.headers("Location") shouldBe toGGLogin("/").header.headers("Location")
+      val result = response(AuthorisedForAnnouncement(controllerComponents))
+     result.header.status must be(303)
+      result.header.headers("Location") must be(toGGLogin("/").header.headers("Location"))
     }
 
     "redirect to Government Gateway and return 303 if auth responds with a NoActiveSession" in {
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new NoActiveSession("") {})
 
-      val result = response(AuthorisedForAnnouncement)
-      status(result) shouldBe 303
+      val result = response(AuthorisedForAnnouncement(controllerComponents))
+      result.header.status must be(303)
       println(result.header.headers("Location"))
-      result.header.headers("Location") shouldBe toGGLogin("/").header.headers("Location")
+      result.header.headers("Location") must be(toGGLogin("/").header.headers("Location"))
     }
   }
 
   override def authConnector: AuthConnector = mockAuthConnector
+  private lazy val mockAuthConnector =  mock[AuthConnector]
 
-  private lazy val mockAuthConnector = mock[AuthConnector]
-
-  private def response(actionBuilder: ActionBuilder[Request]): Result = {
+  private def response(actionBuilder: ActionBuilder[Request, AnyContent]): Result = {
     val action = actionBuilder {
       Results.Ok
     }
-    await(action(FakeRequest()))
+   Await.result(action(FakeRequest()), 5 seconds)
   }
 
-  override def config: Configuration = app.injector.instanceOf[Configuration]
-
-  override def env: Environment = app.injector.instanceOf[Environment]
+ override def config: Configuration = app.injector.instanceOf[Configuration]
+ override def env: Environment = app.injector.instanceOf[Environment]
 }
