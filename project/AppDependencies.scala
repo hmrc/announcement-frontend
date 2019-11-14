@@ -35,8 +35,6 @@ object AppDependencies {
     "org.jsoup" % "jsoup" % "1.12.1" % "test",
     "org.mockito"            % "mockito-all"               % "1.10.19" % "test",
     "com.github.tomakehurst" % "wiremock-jre8"             % "2.21.0" % "test,it",
-    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0" % "test",
-    "net.codingwell"         %% "scala-guice"              % "4.2.6",
-    "uk.gov.hmrc"            %% "bootstrap-play-26"        % "1.1.0" % "test" classifier "tests"
+    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0" % "test"
   )
 }
