@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +40,6 @@ class AnnouncementControllerSpec extends PlaySpec with MockitoSugar with GuiceOn
 
         result.body().toString must include("Need help with completing your tax return?")
         result.body().toString must include("Tell HMRC about an employee's")
-        result.body().toString must include("Webinar")
-        result.body().toString must include("There are several live sessions this month so you can")
-        result.body().toString must include("Talk to an adviser online")
     }
   }
 }
