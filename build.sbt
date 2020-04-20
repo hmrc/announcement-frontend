@@ -17,21 +17,21 @@
 import TestPhases.oneForkedJvmPerTest
 import play.sbt.PlayImport.PlayKeys.playDefaultPort
 import sbt.Keys._
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, scalaSettings}
+import uk.gov.hmrc.DefaultBuildSettings.{ addTestReportOption, defaultSettings, scalaSettings }
 import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
 val appName = "announcement-frontend"
 
-lazy val plugins : Seq[Plugins] = Seq.empty
-lazy val playSettings : Seq[Setting[_]] = Seq.empty
+lazy val plugins: Seq[Plugins] = Seq.empty
+lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
-  .settings( majorVersion := 1 )
-
-  .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
-  .settings(playSettings : _*)
+  .settings(majorVersion := 1)
+  .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
+  .settings(playSettings: _*)
   .settings(scalaSettings: _*)
   .settings(playDefaultPort := 9067)
   .settings(publishingSettings: _*)
@@ -50,8 +50,13 @@ lazy val microservice = Project(appName, file("."))
     unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTest)(base => Seq(base / "it")).value,
     addTestReportOption(IntegrationTest, "int-test-reports"),
     testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-    parallelExecution in IntegrationTest := false)
+    parallelExecution in IntegrationTest := false
+  )
   .settings(resolvers ++= Seq(
     Resolver.jcenterRepo,
-    Resolver.bintrayRepo("hmrc","releases")
+    Resolver.bintrayRepo("hmrc", "releases")
   ))
+  .settings(
+    inConfig(IntegrationTest)(scalafmtCoreSettings),
+    scalafmtOnCompile := true
+  )

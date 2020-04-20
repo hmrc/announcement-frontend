@@ -30,7 +30,6 @@ trait WithWireMock extends PlaySpec with BeforeAndAfterEach {
     WireMock.configureFor("localhost", 20001)
   }
 
-  override protected def afterEach(): Unit = {
+  override protected def afterEach(): Unit =
     wireMockServer.stop()
-  }
 }

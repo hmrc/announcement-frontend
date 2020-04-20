@@ -16,33 +16,34 @@
 
 package uk.gov.hmrc.announcementfrontend.controllers
 
-import javax.inject.{Inject, Singleton}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import javax.inject.{ Inject, Singleton }
+import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
-import play.api.{Configuration, Environment}
+import play.api.{ Configuration, Environment }
 import uk.gov.hmrc.announcementfrontend.config.AppConfig
 import uk.gov.hmrc.announcementfrontend.controllers.actions.AuthActions
 import uk.gov.hmrc.announcementfrontend.views.html
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.play.bootstrap.config.{AuthRedirects, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.{ AuthRedirects, ServicesConfig }
 
 import scala.concurrent.Future
 
 @Singleton
 class AnnouncementController @Inject()(
-                                       implicit val appConfig: AppConfig,
-                                       override val messagesApi: MessagesApi,
-                                       configuration: Configuration,
-                                       servicesConfig: ServicesConfig,
-                                       controllerComponents: MessagesControllerComponents,
-                                       environment: Environment,
-                                       override val authConnector: AuthConnector
-                                       )
-  extends AuthActions with InjectedController  with I18nSupport with AuthorisedFunctions with AuthRedirects {
+  implicit val appConfig: AppConfig,
+  override val messagesApi: MessagesApi,
+  configuration: Configuration,
+  servicesConfig: ServicesConfig,
+  controllerComponents: MessagesControllerComponents,
+  environment: Environment,
+  override val authConnector: AuthConnector
+) extends AuthActions with InjectedController with I18nSupport with AuthorisedFunctions with AuthRedirects {
 
-  def saFillingNotice2018: Action[AnyContent] = AuthorisedForAnnouncement(controllerComponents)(controllerComponents.executionContext).async { implicit announcementRequest =>
-    Future.successful(Ok(html.sa_filing_notice_2018()))
-  }
+  def saFillingNotice2018: Action[AnyContent] =
+    AuthorisedForAnnouncement(controllerComponents)(controllerComponents.executionContext).async {
+      implicit announcementRequest =>
+        Future.successful(Ok(html.sa_filing_notice_2018()))
+    }
 
   def enquiry: Action[AnyContent] = Action {
     Redirect(appConfig.twoWayMessageEnquiryFrontend)

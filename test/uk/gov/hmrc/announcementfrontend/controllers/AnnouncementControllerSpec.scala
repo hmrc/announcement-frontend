@@ -21,11 +21,10 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
+import play.api.i18n.{ Lang, MessagesApi, MessagesImpl }
 import play.api.test.FakeRequest
 import uk.gov.hmrc.announcementfrontend.config.AppConfig
 import uk.gov.hmrc.announcementfrontend.views.html.sa_filing_notice_2018
-
 
 class AnnouncementControllerSpec extends PlaySpec with MockitoSugar with GuiceOneAppPerSuite {
 
@@ -34,12 +33,12 @@ class AnnouncementControllerSpec extends PlaySpec with MockitoSugar with GuiceOn
 
   "Announcements sa-filing-notice-2018 html" should {
     "contain a webchat link with webchat status " in {
-        val messagesApi = app.injector.instanceOf[MessagesApi]
-        val messages = MessagesImpl(Lang.defaultLang, messagesApi)
-        val result = Jsoup.parse(sa_filing_notice_2018()(FakeRequest("GET", "/"), messages , mockAppConfig).toString())
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      val messages = MessagesImpl(Lang.defaultLang, messagesApi)
+      val result = Jsoup.parse(sa_filing_notice_2018()(FakeRequest("GET", "/"), messages, mockAppConfig).toString())
 
-        result.body().toString must include("Need help with completing your tax return?")
-        result.body().toString must include("Tell HMRC about an employee's")
+      result.body().toString must include("Need help with completing your tax return?")
+      result.body().toString must include("Tell HMRC about an employee's")
     }
   }
 }
