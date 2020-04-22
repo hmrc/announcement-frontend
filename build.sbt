@@ -57,6 +57,14 @@ lazy val microservice = Project(appName, file("."))
     Resolver.bintrayRepo("hmrc", "releases")
   ))
   .settings(
-    inConfig(IntegrationTest)(scalafmtCoreSettings),
-    scalafmtOnCompile := true
+    inConfig(IntegrationTest)(scalafmtCoreSettings ++
+       Seq(
+         compileInputs in compile := Def.taskDyn {
+           val task = test in (resolvedScoped.value.scope in scalafmt.key)
+           val previousInputs = (compileInputs in compile).value
+           task.map(_ => previousInputs)
+         }.value
+       )
+    ),
+    scalafmtTestOnCompile in ThisBuild := true
   )
