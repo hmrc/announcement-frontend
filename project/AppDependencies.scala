@@ -25,8 +25,7 @@ object AppDependencies {
     "uk.gov.hmrc" %% "play-ui" % "8.3.0-play-26",
     "uk.gov.hmrc" %% "auth-client" % "2.30.0-play-26",
     ws,
-    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.1.0",
-    "uk.gov.hmrc" %% "csp-client" % "4.1.0-play-26"
+    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.1.0"
   )
 
   val test =Seq(
