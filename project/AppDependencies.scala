@@ -21,12 +21,11 @@ import sbt._
 object AppDependencies {
   
   val compile = Seq(
-    "uk.gov.hmrc" %% "govuk-template" % "5.42.0-play-26",
-    "uk.gov.hmrc" %% "play-ui" % "8.3.0-play-26",
-    "uk.gov.hmrc" %% "auth-client" % "2.30.0-play-26",
+    "uk.gov.hmrc" %% "govuk-template" % "5.63.0-play-26",
+    "uk.gov.hmrc" %% "play-ui" % "9.0.0-play-26",
+    "uk.gov.hmrc" %% "auth-client" % "3.3.0-play-26",
     ws,
-    "uk.gov.hmrc" %% "bootstrap-play-26" % "1.1.0",
-    "uk.gov.hmrc" %% "csp-client" % "4.1.0-play-26"
+    "uk.gov.hmrc" %% "bootstrap-play-26" % "2.2.0"
   )
 
   val test =Seq(
