@@ -18,7 +18,6 @@ import TestPhases.oneForkedJvmPerTest
 import play.sbt.PlayImport.PlayKeys.playDefaultPort
 import sbt.Keys._
 import uk.gov.hmrc.DefaultBuildSettings.{ addTestReportOption, defaultSettings, scalaSettings }
-import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 
@@ -28,7 +27,7 @@ lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin, SbtArtifactory)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(majorVersion := 1)
   .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
   .settings(playSettings: _*)
