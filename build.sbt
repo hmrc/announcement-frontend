@@ -28,7 +28,7 @@ lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin, SbtArtifactory)
   .settings(majorVersion := 1)
   .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
   .settings(playSettings: _*)
@@ -53,8 +53,7 @@ lazy val microservice = Project(appName, file("."))
     parallelExecution in IntegrationTest := false
   )
   .settings(resolvers ++= Seq(
-    Resolver.jcenterRepo,
-    Resolver.bintrayRepo("hmrc", "releases")
+    Resolver.jcenterRepo
   ))
   .settings(
     inConfig(IntegrationTest)(scalafmtCoreSettings ++
