@@ -40,7 +40,7 @@ class AnnouncementController @Inject()(
 ) extends AuthActions with InjectedController with I18nSupport with AuthorisedFunctions with AuthRedirects {
 
   def saFillingNotice2018: Action[AnyContent] =
-    AuthorisedForAnnouncement(controllerComponents)(controllerComponents.executionContext).async {
+    authorisedForAnnouncement(controllerComponents)(controllerComponents.executionContext).async {
       implicit announcementRequest =>
         Future.successful(Ok(html.sa_filing_notice_2018()))
     }

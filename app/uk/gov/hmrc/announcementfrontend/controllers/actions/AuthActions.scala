@@ -19,28 +19,28 @@ package uk.gov.hmrc.announcementfrontend.controllers.actions
 import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals._
-import uk.gov.hmrc.http.Upstream4xxResponse
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.http.{ HeaderCarrier, UpstreamErrorResponse }
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
 
 import scala.concurrent.{ ExecutionContext, Future }
 
 trait AuthActions extends AuthorisedFunctions with AuthRedirects {
 
-  def AuthorisedForAnnouncement(cc: ControllerComponents)(
+  def authorisedForAnnouncement(cc: ControllerComponents)(
     implicit ec: ExecutionContext): ActionBuilder[AnnouncementRequest, AnyContent] =
     new ActionBuilder[AnnouncementRequest, AnyContent] with ActionRefiner[Request, AnnouncementRequest] with Results {
       override def refine[A](request: Request[A]): Future[Either[Result, AnnouncementRequest[A]]] = {
-        implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+        implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
         authorised(Enrolment("IR-SA"))
           .retrieve(authorisedEnrolments) { enrol =>
             Future successful Right(AnnouncementRequest(enrol, request))
           }
           .recover {
-            case _: InsufficientEnrolments                               => throw new IllegalArgumentException
-            case _: AuthorisationException                               => Left(toGGLogin(request.uri))
-            case e: Upstream4xxResponse if e.upstreamResponseCode == 401 => Left(toGGLogin(request.uri))
+            case _: InsufficientEnrolments                       => throw new IllegalArgumentException
+            case _: AuthorisationException                       => Left(toGGLogin(request.uri))
+            case e: UpstreamErrorResponse if e.statusCode == 401 => Left(toGGLogin(request.uri))
             case e =>
               Logger.error(s"Auth failed to respond: ${e.getMessage}", e)
               Left(InternalServerError)

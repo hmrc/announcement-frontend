@@ -16,29 +16,24 @@
 
 package uk.gov.hmrc.announcementfrontend.config
 
+import play.api.Configuration
 import javax.inject.{ Inject, Singleton }
-import play.api.{ Configuration, Environment }
-import uk.gov.hmrc.play.bootstrap.config.{ RunMode, ServicesConfig }
+
 @Singleton
 class AppConfig @Inject()(
-  servicesConfig: ServicesConfig,
-  runModeConfiguration: Configuration,
-  environment: Environment,
-  runMode: RunMode) {
-
+  configuration: Configuration
+) {
   private def loadConfig(key: String) =
-    runModeConfiguration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+    configuration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private val contactHost = runModeConfiguration.getOptional[String](s"contact-frontend.host").getOrElse("")
+  private val contactHost = configuration.getOptional[String](s"contact-frontend.host").getOrElse("")
   private val twoWayMessageHost =
-    runModeConfiguration.getOptional[String](s"two-way-message-frontend.host").getOrElse("")
+    configuration.getOptional[String](s"two-way-message-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
-  lazy val buttonToggle =
-    runModeConfiguration.getOptional[Boolean](s"${runMode.env}.featureToggle.button.switch").getOrElse(false)
-  lazy val twoWayMessageEnabled =
-    runModeConfiguration.getOptional[Boolean](s"${runMode.env}.twoWayMessage.enable").getOrElse(false)
-  lazy val assetsPrefix = loadConfig(s"assets.url") + loadConfig(s"assets.version")
+  lazy val buttonToggle: Boolean = configuration.get[Boolean](s"featureToggle.button.switch")
+  lazy val twoWayMessageEnabled: Boolean = configuration.get[Boolean](s"twoWayMessage.enable")
+  lazy val assetsPrefix: String = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   lazy val twoWayMessageEnquiryFrontend =
