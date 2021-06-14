@@ -17,14 +17,11 @@
 package uk.gov.hmrc.announcementfrontend.config
 
 import javax.inject.{ Inject, Singleton }
-import play.api.{ Configuration, Environment }
-import uk.gov.hmrc.play.bootstrap.config.{ RunMode, ServicesConfig }
+import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.RunMode
+
 @Singleton
-class AppConfig @Inject()(
-  servicesConfig: ServicesConfig,
-  runModeConfiguration: Configuration,
-  environment: Environment,
-  runMode: RunMode) {
+class AppConfig @Inject()(runModeConfiguration: Configuration, runMode: RunMode) {
 
   private def loadConfig(key: String) =
     runModeConfiguration.getOptional[String](key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
