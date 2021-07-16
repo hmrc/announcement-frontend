@@ -46,7 +46,7 @@ class AuthActionsSpec extends PlaySpec with AuthActions with MockitoSugar with G
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future successful Enrolments(Set(enrolmentWithSAUTR)))
 
-      val result: Result = response(AuthorisedForAnnouncement(controllerComponents))
+      val result: Result = response(authorisedForAnnouncement(controllerComponents))
       result.header.status must be(200)
     }
 
@@ -54,14 +54,14 @@ class AuthActionsSpec extends PlaySpec with AuthActions with MockitoSugar with G
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new InsufficientEnrolments)
 
-      intercept[IllegalArgumentException](response(AuthorisedForAnnouncement(controllerComponents)))
+      intercept[IllegalArgumentException](response(authorisedForAnnouncement(controllerComponents)))
     }
 
     "return a Internal Server Error if auth fails to respond" in {
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new Throwable)
 
-      val result = response(AuthorisedForAnnouncement(controllerComponents))
+      val result = response(authorisedForAnnouncement(controllerComponents))
       result.header.status must be(500)
     }
 
@@ -69,7 +69,7 @@ class AuthActionsSpec extends PlaySpec with AuthActions with MockitoSugar with G
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new AuthorisationException("") {})
 
-      val result = response(AuthorisedForAnnouncement(controllerComponents))
+      val result = response(authorisedForAnnouncement(controllerComponents))
       result.header.status must be(303)
       result.header.headers("Location") must be(toGGLogin("/").header.headers("Location"))
     }
@@ -78,7 +78,7 @@ class AuthActionsSpec extends PlaySpec with AuthActions with MockitoSugar with G
       when(mockAuthConnector.authorise(any(), any[Retrieval[Enrolments]])(any(), any()))
         .thenReturn(Future failed new NoActiveSession("") {})
 
-      val result = response(AuthorisedForAnnouncement(controllerComponents))
+      val result = response(authorisedForAnnouncement(controllerComponents))
       result.header.status must be(303)
       println(result.header.headers("Location"))
       result.header.headers("Location") must be(toGGLogin("/").header.headers("Location"))
