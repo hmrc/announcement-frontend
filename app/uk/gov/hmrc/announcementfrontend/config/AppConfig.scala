@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.announcementfrontend.config
 
-import play.api.{Configuration, Environment}
+import play.api.{ Configuration, Environment }
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 
 @Singleton
 class AppConfig @Inject()(
